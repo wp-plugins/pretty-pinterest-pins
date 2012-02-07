@@ -55,10 +55,12 @@ You can configure:
 
 == Changelog ==
 
+= 1.1 =
+* Fixes text trim for older versions of Wordpress.
+
 = 1.0 =
 * Initial version
 
 == Upgrade Notice ==
 
-= 1.0 =
-Enjoy!
+= 1.1 =

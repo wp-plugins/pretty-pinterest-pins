@@ -150,7 +150,7 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 				foreach ( $latest_pins as $item ):
 					$rss_pin_description = $item->get_description();			
 					preg_match('/<img[^>]+>/i', $rss_pin_description, $pin_image); 
-					$pin_caption = wp_trim_words( strip_tags( $rss_pin_description ), 35 );
+					$pin_caption = $this->trim_text( strip_tags( $rss_pin_description ), 400 );
 					?>
 				<li class="pretty-pinterest-pin">
 					<div class="pretty-pinterest-image">
@@ -184,6 +184,20 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 		endif;		
 		return $rss_items;
 	}
+	
+	function trim_text( $text, $length ) {
+		//strip html
+		$text = strip_tags( $text );	  
+		//no need to trim if its shorter than length
+		if (strlen($text) <= $length) {
+			return $text;
+		}		
+		$last_space = strrpos( substr( $text, 0, $length ), ' ');
+		$trimmed_text = substr( $text, 0, $last_space );		
+		$trimmed_text .= '...';	  
+		return $trimmed_text;
+	}
+
 
 }
 add_filter( 'wp_feed_cache_transient_lifetime', create_function('$rssLife', 'return 500;') );
