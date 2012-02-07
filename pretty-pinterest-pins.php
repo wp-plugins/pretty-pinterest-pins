@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Pretty_Pinterest_Pins
- * @version 1.0
+ * @version 1.1
  */
 /*
 Plugin Name: Pretty Pinterest Pins
 Description: Display your latest pins from Pinterest in your sidebar.
 Author: Jodi Wilkinson
 Plugin URI: http://wordpress.org/extend/plugins/pretty-pinterest-pins/
-Version: 1.0
+Version: 1.1
 Author URI: http://jodiwilkinson.com
 */
 
