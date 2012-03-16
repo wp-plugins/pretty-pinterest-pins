@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Pretty_Pinterest_Pins
- * @version 1.1
+ * @version 1.2
  */
 /*
 Plugin Name: Pretty Pinterest Pins
 Description: Display your latest pins from Pinterest in your sidebar.
 Author: Jodi Wilkinson
 Plugin URI: http://wordpress.org/extend/plugins/pretty-pinterest-pins/
-Version: 1.1
+Version: 1.2
 Author URI: http://jodiwilkinson.com
 */
 
@@ -23,11 +23,12 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 	}
 
 	function form($instance){
-		$instance = wp_parse_args( (array) $instance, array( 'title' => 'Latest Pins on Pinterest', 'pinterest_username' => '', 'number_of_pins_to_show' => '3', 'show_pinterest_caption' => '1', 'show_follow_button' => '1') );
+		$instance = wp_parse_args( (array) $instance, array( 'title' => 'Latest Pins on Pinterest', 'pinterest_username' => '', 'number_of_pins_to_show' => '3', 'show_pinterest_caption' => '1', 'show_follow_button' => '1', 'specific_board' => '') );
 		if ( $instance ) {
 			$title = esc_attr( $instance[ 'title' ] );
 			$number_of_pins_to_show = esc_attr( $instance[ 'number_of_pins_to_show' ] );
-			$pinterest_username = esc_attr( $instance[ 'pinterest_username' ] );	
+			$pinterest_username = esc_attr( $instance[ 'pinterest_username' ] );
+			$specific_board = esc_attr( $instance[ 'specific_board' ] );	
 			$show_pinterest_caption = esc_attr( $instance[ 'show_pinterest_caption' ] );
 			$show_follow_button = esc_attr( $instance[ 'show_follow_button' ] );			
 		}		
@@ -41,10 +42,14 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 		<input class="widefat" id="<?php echo $this->get_field_id('pinterest_username'); ?>" name="<?php echo $this->get_field_name('pinterest_username'); ?>" type="text" value="<?php echo $pinterest_username; ?>" />
 		</p>
 		<p>
+		<label for="<?php echo $this->get_field_id('specific_board'); ?>"><?php _e('Specific Board (optional):'); ?></label> 
+		<input class="widefat" id="<?php echo $this->get_field_id('specific_board'); ?>" name="<?php echo $this->get_field_name('specific_board'); ?>" type="text" value="<?php echo $specific_board; ?>" />
+		</p>		
+		<p>
 		<label for="<?php echo $this->get_field_id('number_of_pins_to_show'); ?>"><?php _e('Number of Pins To Show:'); ?></label>		
 		<select name="<?php echo $this->get_field_name( 'number_of_pins_to_show' );?>">
 		<?php 
-		for ( $i = 1; $i <= 10; ++$i ){?>
+		for ( $i = 1; $i <= 25; ++$i ){?>
 			<option value="<?php echo $i;?>" <?php selected( $number_of_pins_to_show, $i );?>><?php echo $i;?></option>
 		<?php
 		}
@@ -68,6 +73,7 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['number_of_pins_to_show'] = strip_tags($new_instance['number_of_pins_to_show']);
 		$instance['pinterest_username'] = strip_tags($new_instance['pinterest_username']);
+		$instance['specific_board'] = strip_tags($new_instance['specific_board']);
 		$instance['show_pinterest_caption'] = strip_tags($new_instance['show_pinterest_caption']);
 		$instance['show_follow_button'] = strip_tags($new_instance['show_follow_button']);
 		return $instance;
@@ -86,9 +92,15 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 			$number_of_pins_to_show = esc_attr ( $instance['number_of_pins_to_show'] );
 		} else {
 			$number_of_pins_to_show = 3;
-		}		
+		}
+		if( !empty( $instance['specific_board'] ) ) {	
+			$feed_url = 'http://pinterest.com/'.$instance['pinterest_username'].'/'.$instance['specific_board'].'/rss';
+		} else {
+			$feed_url = 'http://pinterest.com/'.$instance['pinterest_username'].'/feed.rss';	
+		}
+		
 		//fetch rss
-		$latest_pins = $this->pretty_pinterest_pins_get_rss_feed( $instance['pinterest_username'], $instance['number_of_pins_to_show'] );
+		$latest_pins = $this->pretty_pinterest_pins_get_rss_feed( $instance['pinterest_username'], $instance['number_of_pins_to_show'], $feed_url );
 		?>
 		<style>
 		ul#pretty-pinterest-pins-widget{
@@ -145,7 +157,7 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 		}
 		</style>		
 		<ul id="pretty-pinterest-pins-widget">			
-			<?php 
+		<?php 
 			if(!empty( $latest_pins ) ){
 				foreach ( $latest_pins as $item ):
 					$rss_pin_description = $item->get_description();			
@@ -174,9 +186,9 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 		echo $after_widget;
 	}
 	
-	function pretty_pinterest_pins_get_rss_feed( $pinterest_username, $number_of_pins_to_show ){				
-		// Get a SimplePie feed object from the specified feed source.
-		$rss = fetch_feed('http://pinterest.com/'.$pinterest_username.'/feed.rss');
+	function pretty_pinterest_pins_get_rss_feed( $pinterest_username, $number_of_pins_to_show, $feed_url ){				
+		// Get a SimplePie feed object from the specified feed source.		
+		$rss = fetch_feed( $feed_url );
 		if (!is_wp_error( $rss ) ) : 
 			// Figure out how many total items there are, but limit it to number specified
 			$maxitems = $rss->get_item_quantity( $number_of_pins_to_show ); 
