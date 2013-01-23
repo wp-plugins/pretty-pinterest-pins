@@ -3,7 +3,7 @@ Contributors: jowilki
 Donate link: http://jodiwilkinson.com
 Tags: pinterest, widget, sidebar, plugin
 Requires at least: 2.8
-Tested up to: 3.4
+Tested up to: 3.5
 Stable tag: trunk
 
 A plugin to show off images, captions, and links from your latest Pinterest activity.
@@ -28,7 +28,8 @@ Features:
 * Semantic HTML
 * Easy to Install: Simply add a Pinterest username and you're good to go!
 
-More to come when Pinterest opens their API!
+More to come when Pinterest opens their API!  This project is maintained on github if you'd like to contribute : 
+https://github.com/jowilki/pretty-pinterest-pins
 
 
 == Installation ==
