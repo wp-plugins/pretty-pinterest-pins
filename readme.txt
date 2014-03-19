@@ -3,7 +3,7 @@ Contributors: jowilki
 Donate link: http://jodiwilkinson.com
 Tags: pinterest, widget, sidebar, plugin
 Requires at least: 2.8
-Tested up to: 3.6
+Tested up to: 3.8.1
 Stable tag: trunk
 
 A plugin to show off images, captions, and links from your latest Pinterest activity.
