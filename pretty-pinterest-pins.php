@@ -1,14 +1,14 @@
 <?php
 /**
  * @package Pretty_Pinterest_Pins
- * @version 1.2
+ * @version 1.3
  */
 /*
 Plugin Name: Pretty Pinterest Pins
 Description: Display your latest pins from Pinterest in your sidebar.
 Author: Jodi Wilkinson
 Plugin URI: http://wordpress.org/extend/plugins/pretty-pinterest-pins/
-Version: 1.2
+Version: 1.3
 Author URI: http://jodiwilkinson.com
 */
 
@@ -94,9 +94,9 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 			$number_of_pins_to_show = 3;
 		}
 		if( !empty( $instance['specific_board'] ) ) {	
-			$feed_url = 'http://pinterest.com/'.$instance['pinterest_username'].'/'.$instance['specific_board'].'/rss';
+			$feed_url = 'https://pinterest.com/'.$instance['pinterest_username'].'/'.$instance['specific_board'].'/rss';
 		} else {
-			$feed_url = 'http://pinterest.com/'.$instance['pinterest_username'].'/feed.rss';	
+			$feed_url = 'https://pinterest.com/'.$instance['pinterest_username'].'/feed.rss';	
 		}
 		
 		//fetch rss
@@ -176,7 +176,7 @@ class Pretty_Pinterest_Pins extends WP_Widget{
 			}
 			if( $instance['show_follow_button'] ){
 			?>
-			<li class="pretty-pinterest-follow-me"><a href="http://pinterest.com/<?php echo $instance['pinterest_username'];?>/" target="_blank"><img src="http://passets-cdn.pinterest.com/images/follow-on-pinterest-button.png" width="156" height="26" alt="Follow Me on Pinterest" /></a></li>
+			<li class="pretty-pinterest-follow-me"><a href="https://pinterest.com/<?php echo $instance['pinterest_username'];?>/" target="_blank"><img src="https://passets-cdn.pinterest.com/images/follow-on-pinterest-button.png" width="156" height="26" alt="Follow Me on Pinterest" /></a></li>
 			<?php
 			}
 			?>		
